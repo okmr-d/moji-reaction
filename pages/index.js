@@ -4,16 +4,20 @@ import { useForm } from "react-hook-form"
 
 import Header from '../components/Header'
 import ColorPicker from '../components/ColorPicker'
+import { fontInfoList } from '../constants/fontInfoList'
 
 export default function Home() {
 
   const [color, setColor] = useState("#EC71A1")
   const [colorModalOpen, setColorModalOpen] = useState(false)
 
+  const [imageUrl, setImageUrl] = useState(null)
+
   const { register, handleSubmit, errors } = useForm()
 
   const onSubmit = ({ text, font }) => {
     console.log({ text, font, color })
+    setImageUrl(`/api/image?text=${encodeURIComponent(text)}&font=${font}&color=${color.replace('#', '')}`)
   }
 
   return (
@@ -29,7 +33,7 @@ export default function Home() {
         <div className="p-4">
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="sm:flex sm:-mx-2">
-              <div className="sm:w-1/2 sm:px-2">
+              <div className="sm:w-2/5 sm:px-2">
                 <div className="mb-6">
                   <div className="font-bold mb-2">1. テキストを入力</div>
                   <div>
@@ -41,18 +45,14 @@ export default function Home() {
                 <div className="mb-6">
                   <div className="font-bold mb-2">2. フォントを選択</div>
                   <div>
-                    <div>
-                      <label>
-                        <input name="font" type="radio" value="font1" ref={register({ required: true })} />
-                        font1
-                      </label>
-                    </div>
-                    <div>
-                      <label>
-                        <input name="font" type="radio" value="font2" ref={register({ required: true })} />
-                        font2
-                      </label>
-                    </div>
+                    {Object.keys(fontInfoList).map(key => (
+                      <div key={key}>
+                        <label>
+                          <input name="font" type="radio" value={fontInfoList[key].name} ref={register({ required: true })} />
+                          {fontInfoList[key].nameJa}
+                        </label>
+                      </div>
+                    ))}
                   </div>
                   {errors.font?.type === "required" && <div className="mt-1 text-xs text-red-500">選択してください</div>}
                 </div>
@@ -98,19 +98,25 @@ export default function Home() {
                   </div>
                 )}
               </div>
-              <div className="sm:w-1/2 sm:px-2">
-                プレビュー
-                <div className="border">
+              <div className="sm:w-3/5 sm:px-2">
 
-                </div>
-
-                <div>
+                <div className="mb-6">
+                  <div className="font-bold mb-2">4. プレビュー</div>
                   <button
                     type="submit"
+                    className="bg-blue-500"
                   >
-                    この画像をシェア
+                    プレビューを生成
                   </button>
                 </div>
+
+                {imageUrl && (
+                  <>
+                    <div className="border" style={{ maxWidth: "300px" }}>
+                      <img src={imageUrl} className="w-full" />
+                    </div>
+                  </>
+                )}
               </div>
             </div>
 

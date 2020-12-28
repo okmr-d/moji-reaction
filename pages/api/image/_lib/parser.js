@@ -1,4 +1,5 @@
 import { parse } from 'url'
+import { fontInfoList, defaultFontInfo } from '../../../../constants/fontInfoList'
 
 export function parseRequest(req) {
   console.log('HTTP ' + req.url)
@@ -15,10 +16,13 @@ export function parseRequest(req) {
     throw new Error('Expected a single color')
   }
 
-  let fontValue = font
-  if (!['font1', 'font2'].includes(fontValue)) {
-    fontValue = 'font1'
+  let fontInfo
+  if (Object.keys(fontInfoList).includes(font)) {
+    fontInfo = fontInfoList[font]
+  } else {
+    fontInfo = defaultFontInfo
   }
+
   let colorValue = color
   if (!/^[a-fA-F0-9]{6}$/.test(colorValue)) {
     colorValue = '000000'
@@ -26,7 +30,7 @@ export function parseRequest(req) {
 
   return {
     text: decodeURIComponent(text),
-    font: fontValue,
+    fontInfo,
     color: colorValue,
   }
 }

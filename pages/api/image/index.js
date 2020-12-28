@@ -3,8 +3,8 @@ import makeTextImage from './_lib/makeTextImage'
 
 export default async function handler(req, res) {
   try {
-    const { text, font, color } = parseRequest(req)
-    const file = await makeTextImage(text, color, 'normal sans-serif')
+    const { text, fontInfo, color } = parseRequest(req)
+    const file = await makeTextImage(text, fontInfo, color)
     res.statusCode = 200
     res.setHeader('Content-Type', 'image/png')
     res.setHeader('Cache-Control', `public, immutable, no-transform, s-maxage=31536000, max-age=31536000`)

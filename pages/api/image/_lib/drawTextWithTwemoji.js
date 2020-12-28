@@ -2,12 +2,6 @@
 import { parse } from 'twemoji-parser'
 import { loadImage } from 'canvas'
 
-/*
- * Split Text
- * ex)
- *  '君👼の味方🤝だよ'
- *  > ['君', TwemojiObj(👼), 'の味方', TwemojiObj(🤝), 'だよ']
- */
 function splitEntitiesFromText (text) {
   const twemojiEntities = parse(text, { assetType: 'svg' })
 
