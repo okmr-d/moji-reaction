@@ -70,7 +70,7 @@ export default function Home({ initialFormValues, initialShareInfo }) {
 
       <Header />
 
-      <div className="max-w-2xl mx-auto">
+      <div className="max-w-2xl mx-auto mb-6">
         <div className="p-4">
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="sm:flex sm:-mx-4">
@@ -286,6 +286,21 @@ export default function Home({ initialFormValues, initialShareInfo }) {
             </div>
 
           </form>
+        </div>
+      </div>
+      <div className="border-t">
+        <div className="max-w-2xl mx-auto mb-6">
+          <div className="py-2 text-center">
+            作者：
+            <a
+              href="https://twitter.com/okumura_daiki"
+              className="text-blue-500"
+              target="_blank"
+              rel="noopener"
+            >
+              @okumura_daiki
+            </a>
+          </div>
         </div>
       </div>
     </div>
