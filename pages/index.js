@@ -12,7 +12,7 @@ function getPageAndImagePath({ text, font, color }) {
   const queryString = `text=${encodeURIComponent(text)}&font=${font}&color=${color.replace('#', '')}`
   const canShare = !!text
   const pagePath = canShare ? `/?${queryString}` : '/'
-  const imagePath = canShare ? `/api/image?${queryString}` : '/img/default.png'
+  const imagePath = canShare ? `/api/image?${queryString}` : '/images/default_og_image.png'
   return {
     pagePath,
     imagePath
@@ -53,15 +53,15 @@ export default function Home({ initialFormValues, initialShareInfo }) {
     <div className="text-sm">
       <Head>
         <title>{shareInfo.title}</title>
-        {!shareInfo.canShare && (
-          <meta name="description" content="文字画像でリアクションしよう！" />
-        )}
+        <meta name="description" content="文字画像でリアクションをしよう！" />
         <meta name="og:title" property="og:title" content={shareInfo.title} />
         <meta name="og:image" property="og:image" content={process.env.NEXT_PUBLIC_SITE_ROOT_URL + shareInfo.imagePath} />
         <meta name="og:url" property="og:url" content={process.env.NEXT_PUBLIC_SITE_ROOT_URL + shareInfo.pagePath} />
         <meta name="twitter:card" content="summary" />
         <link rel="canonical" href={process.env.NEXT_PUBLIC_SITE_ROOT_URL + shareInfo.pagePath} />
-        <link rel="icon" href="/favicon.ico" />
+
+        <link rel="apple-touch-icon" type="image/png" href="/images/apple-touch-icon-180x180.png" />
+        <link rel="icon" type="image/png" href="/images/icon-192x192.png" />
 
         <link rel="preconnect" href="https://fonts.gstatic.com" />
         <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@700;900&family=M+PLUS+Rounded+1c:wght@700;900&family=Noto+Serif+JP:wght@900&display=swap" rel="stylesheet" />
@@ -291,7 +291,7 @@ export async function getServerSideProps(context) {
       },
       initialShareInfo: {
         canShare: canShare,
-        title: text?.replace(/\r?\n/g, '') || '文字リアクション！',
+        title: text?.replace(/\r?\n/g, '') || '文字リアクション',
         pagePath: pagePath,
         imagePath: imagePath,
       },
