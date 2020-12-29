@@ -8,19 +8,23 @@ import Header from '../components/Header'
 import ColorPicker from '../components/ColorPicker'
 import { fontInfoList, defaultFontInfo } from '../constants/fontInfoList'
 
+function getPageAndImagePath({ text, font, color }) {
+  const queryString = `text=${encodeURIComponent(text)}&font=${font}&color=${color.replace('#', '')}`
+  const canShare = !!text
+  const pagePath = canShare ? `/?${queryString}` : '/'
+  const imagePath = canShare ? `/api/image?${queryString}` : '/img/default.png'
+  return {
+    pagePath,
+    imagePath
+  }
+}
+
 export default function Home({ initialFormValues, initialShareInfo }) {
   console.log({ initialFormValues, initialShareInfo })
 
   const [colorModalOpen, setColorModalOpen] = useState(false)
 
-  const [shareInfo, setShareInfo] = useState({
-    canShare: false,
-    title: 'サイト名',
-    pagePath: '/',
-    imagePath: null,
-  })
-
-  const ogImagePath = shareInfo.canShare ? shareInfo.imagePath : ''
+  const [shareInfo, setShareInfo] = useState(initialShareInfo)
 
   const router = useRouter()
 
@@ -33,9 +37,7 @@ export default function Home({ initialFormValues, initialShareInfo }) {
   const currentColor = useWatch({ control, name: 'color' })
 
   const onSubmit = ({ text, font, color }) => {
-    const queryString = `text=${encodeURIComponent(text)}&font=${font}&color=${color.replace('#', '')}`
-    const pagePath = `/?${queryString}`
-    const imagePath = `/api/image?${queryString}`
+    const { pagePath, imagePath } = getPageAndImagePath({ text, font, color })
 
     setShareInfo({
       canShare: true,
@@ -51,8 +53,11 @@ export default function Home({ initialFormValues, initialShareInfo }) {
     <div className="text-sm">
       <Head>
         <title>{shareInfo.title}</title>
+        {!shareInfo.canShare && (
+          <meta name="description" content="文字画像でリアクションしよう！" />
+        )}
         <meta name="og:title" property="og:title" content={shareInfo.title} />
-        <meta name="og:image" property="og:image" content={process.env.NEXT_PUBLIC_SITE_ROOT_URL + ogImagePath} />
+        <meta name="og:image" property="og:image" content={process.env.NEXT_PUBLIC_SITE_ROOT_URL + shareInfo.imagePath} />
         <meta name="og:url" property="og:url" content={process.env.NEXT_PUBLIC_SITE_ROOT_URL + shareInfo.pagePath} />
         <meta name="twitter:card" content="summary" />
         <link rel="canonical" href={process.env.NEXT_PUBLIC_SITE_ROOT_URL + shareInfo.pagePath} />
@@ -274,19 +279,21 @@ export default function Home({ initialFormValues, initialShareInfo }) {
 export async function getServerSideProps(context) {
   const { text, fontInfo, color } = parseRequest(context.req)
   const font = fontInfo.name
+  const canShare = !!text
+  const { pagePath, imagePath } = getPageAndImagePath({ text, font, color })
 
   return {
     props: {
       initialFormValues: {
-        text: text,
+        text: text || "",
         font: font,
         color: `#${color}`,
       },
       initialShareInfo: {
-        canShare: false,
-        title: text || 'サイト名',
-        pagePath: '/',
-        imagePath: null,
+        canShare: canShare,
+        title: text?.replace(/\r?\n/g, '') || '文字リアクション！',
+        pagePath: pagePath,
+        imagePath: imagePath,
       },
     },
   }
