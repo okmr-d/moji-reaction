@@ -1,4 +1,4 @@
-import { parseRequest } from './_lib/parser'
+import { parseRequest } from '../../../lib/parser'
 import makeTextImage from './_lib/makeTextImage'
 
 export default async function handler(req, res) {

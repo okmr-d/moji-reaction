@@ -1,7 +1,7 @@
 export const fontInfoList = {
   'noto-sans-jp-bold': {
     name: 'noto-sans-jp-bold',
-    nameJa: '太ゴシック',
+    nameJa: '太めゴシック',
     ext: 'otf',
     adjustedValue: 80,
     fontFamily: "'Noto Sans JP', sans-serif",
@@ -9,7 +9,7 @@ export const fontInfoList = {
   },
   'mplus-rounded-1c-bold': {
     name: 'mplus-rounded-1c-bold',
-    nameJa: '太丸ゴシック',
+    nameJa: '太め丸ゴシック',
     ext: 'ttf',
     adjustedValue: 60,
     fontFamily: "'M PLUS Rounded 1c', sans-serif",
