@@ -7,6 +7,7 @@ import { parseRequest } from '../lib/parser'
 import Header from '../components/Header'
 import ColorPicker from '../components/ColorPicker'
 import { fontInfoList, defaultFontInfo } from '../constants/fontInfoList'
+import copyText from '../lib/copyText'
 
 function getPageAndImagePath({ text, font, color }) {
   const queryString = `text=${encodeURIComponent(text)}&font=${font}&color=${color.replace('#', '')}`
@@ -249,18 +250,33 @@ export default function Home({ initialFormValues, initialShareInfo }) {
                           Facebookでシェア
                         </button>
                       </div>
-                    </div>
 
-                    <div>
-                      <a
-                        href={`http://line.me/R/msg/text/?${encodeURIComponent(process.env.NEXT_PUBLIC_SITE_ROOT_URL + shareInfo.pagePath)}`}
-                        target="_blank"
-                        rel="noopener"
-                        className="flex w-full justify-center text-white font-bold px-4 py-1 rounded-lg"
-                        style={{ backgroundColor: "#14b734" }}
-                      >
-                        LINEで送る
-                      </a>
+                      <div className="mb-2">
+                        <a
+                          href={`http://line.me/R/msg/text/?${encodeURIComponent(process.env.NEXT_PUBLIC_SITE_ROOT_URL + shareInfo.pagePath)}`}
+                          target="_blank"
+                          rel="noopener"
+                          className="flex w-full justify-center text-white font-bold px-4 py-1 rounded-lg"
+                          style={{ backgroundColor: "#14b734" }}
+                        >
+                          LINEで送る
+                        </a>
+                      </div>
+
+                      <div className="mb-2">
+                        <button
+                          onClick={() => {
+                            copyText(process.env.NEXT_PUBLIC_SITE_ROOT_URL + shareInfo.pagePath)
+                            window.alert("コピーしました！")
+                          }}
+                          disabled={!shareInfo.canShare}
+                          className="flex w-full justify-center font-bold px-4 py-1 rounded-lg focus:outline-none bg-gray-300"
+                        >
+                          URLをコピー
+                        </button>
+                      </div>
+
+                      <div className="mt-2 text-xs text-gray-600">※うまくいかない場合は何度かURLを貼り直してみてください🙏</div>
                     </div>
 
                   </div>
